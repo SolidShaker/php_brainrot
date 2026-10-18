@@ -19,14 +19,23 @@ $is_info  = $uri == '/aizen/info';
 </ul>
 
 
-<?php
-if ($is_image)
-{
-    require "aizen_image.php";
-}
-elseif ($is_info)
-{
-    require "aizen_info.php";
-}
-?>
 
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <?php
+            if ($is_image)
+            {
+                require "aizen_image.php";
+            }
+            elseif ($is_info)
+            {
+                require "aizen_info.php";
+            }
+            else
+            {
+                echo "Please choose a category";
+            }
+        ?>
+    </li>
+</ul>

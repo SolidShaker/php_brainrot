@@ -18,13 +18,22 @@ $is_info  = $uri == '/madara/info';
     </li>
 </ul>
 
-<?php
-if ($is_image)
-{
-    require "madara_image.php";
-}
-elseif ($is_info)
-{
-    require "madara_info.php";
-}
-?>
+<ul class="list-group">
+    <li class="list-group-item">
+        <?php
+            if ($is_image)
+            {
+                require "madara_image.php";
+            }
+            elseif ($is_info)
+            {
+                require "madara_info.php";
+            }
+            else
+            {
+                echo "Please choose a category";
+            }
+        ?>
+    </li>
+</ul>
+
