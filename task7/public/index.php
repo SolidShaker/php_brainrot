@@ -18,37 +18,67 @@ $context = [];
 $menu = [ 
     [
         "title" => "Home",
-        "url" => "/",
+        "url" => "/"
     ],
     [
         "title" => "Aizen",
         "url" => "/aizen",
+
+        "image" => "/aizen/image",
+        "info" => "/aizen/info"
     ],
     [
         "title" => "Madara",
         "url" => "/madara",
+
+        "image" => "/madara/image",
+        "info" => "/madara/info"
     ]
 ];
 
 
 if ($url == "/")
 {
-    $title = "Home";
+    $title = "home";
     $template = "main.twig";
 } 
-elseif (preg_match("#/aizen#", $url))
+
+elseif (preg_match("#^/aizen#", $url))
 {
     $title = "Aizen";
-    $template = "image.twig";
-    
-    $context['image'] = "/images/aizen.gif";
+    $template = "__character.twig";
+
+    if (preg_match("#^/aizen/image#", $url))
+    {
+        $template = "image.twig";
+        $context['image'] = "/images/aizen.gif";
+        $context['active'] = 'image';
+    }
+    elseif (preg_match("#^/aizen/info#", $url))
+    {
+        $template = "info.twig";
+        $context['info'] = "You are here... As planed.";
+        $context['active'] = 'info';
+    }
 }
-elseif (preg_match("#/madara#", $url))
+
+elseif (preg_match("#^/madara#", $url))
 {
     $title = "Madara";
-    $template = "image.twig";
+    $template = "__character.twig";
 
-    $context['image'] = "/images/madara.gif";
+    if (preg_match("#^/madara/image#", $url))
+    {
+        $template = "image.twig";
+        $context['image'] = "/images/madara.gif";
+        $context['active'] = 'image';
+    }
+    elseif (preg_match("#^/madara/info#", $url))
+    {
+        $template = "info.twig";
+        $context['info'] = "Wanna dance?..";
+        $context['active'] = 'info';
+    }
 }
 
 $context["title"] = $title;
