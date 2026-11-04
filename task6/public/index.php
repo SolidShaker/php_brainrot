@@ -1,66 +1,35 @@
 <?php
 require_once "../vendor/autoload.php";
+require_once "../framework/autoload.php";
 
-require_once "../controllers/MainController.php";
-
-require_once "../controllers/AizenController.php";
-require_once "../controllers/AizenImageController.php";
-require_once "../controllers/AizenInfoController.php";
-
-require_once "../controllers/MadaraController.php";
-require_once "../controllers/MadaraImageController.php";
-require_once "../controllers/MadaraInfoController.php";
 
 require_once "../controllers/Controller404.php"; // added
+
+require_once "../controllers/MainController.php"; // Main Page
+
+require_once "../controllers/ObjectController.php"; // Object
+require_once "../controllers/ObjectInfoController.php"; // Info
+require_once "../controllers/ObjectImageController.php"; // Image
+
 
 
 
 $loader = new \Twig\Loader\FilesystemLoader('../views');
-$twig = new \Twig\Environment($loader);
+$twig = new \Twig\Environment($loader, [
+    "debug" => true 
+]);
+$twig->addExtension(new \Twig\Extension\DebugExtension()); 
 
 
-$url = $_SERVER["REQUEST_URI"];
 
-$context = [];
-$controller = null;
-
-$controller = new Controller404($twig); 
+$database = new Database();
 
 
-if ($url == "/")
-{
-    $controller = new MainController($twig);
-}
+$router = new Router($twig, $database->pdo);
+$router->Add('/', MainController::class);
+$router->Add("/characters/(?P<id>\d+)/info", ObjectInfoController::class);
+$router->Add("/characters/(?P<id>\d+)/image", ObjectImageController::class);
+$router->Add("/characters/(?P<id>\d+)", ObjectController::class);
 
-elseif (preg_match("#^/aizen/info#", $url))
-{
-    $controller = new AizenInfoController($twig);    
-}
-elseif (preg_match("#^/aizen/image#", $url))
-{
-    $controller = new AizenImageController($twig);                
-}
-elseif (preg_match("#^/aizen#", $url))
-{
-    $controller = new AizenController($twig);
-}
+$router->GetOrDefault(Controller404::class);
 
-elseif (preg_match("#^/madara/info#", $url))
-{
-    $controller = new MadaraInfoController($twig);    
-}
-elseif (preg_match("#^/madara/image#", $url))
-{
-    $controller = new MadaraImageController($twig);                
-}
-elseif (preg_match("#^/madara#", $url))
-{
-    $controller = new MadaraController($twig);    
-}
-
-if ($controller)
-{
-    $controller->get();    
-}
-
-?>

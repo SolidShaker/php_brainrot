@@ -1,31 +1,31 @@
 {% extends "__layout.twig" %}
 
-
-
-
 {% block content %}
-<ul class="list-group">
-    <li class="list-group-item">
-        <button type="button" class="btn btn-primary">
-            <a class="nav-link active" aria-current="page" href="/aizen"#>Aizen</a>
-        </button>
-        <button type="button" class="btn btn-link">
-            <a class="nav-link active" aria-current="page" href="/aizen/image"#>Picture</a>
-        </button>
-        <button type="button" class="btn btn-link">
-            <a class="nav-link active" aria-current="page" href="/aizen/info"#>Info</a>
-        </button>
-    </li>
-    <li class="list-group-item">
-        <button type="button" class="btn btn-primary">
-            <a class="nav-link active" aria-current="page" href="/madara/"#>Madara</a>
-        </button>
-        <button type="button" class="btn btn-link">
-            <a class="nav-link active" aria-current="page" href="/madara/image"#>Picture</a>
-        </button>
-        <button type="button" class="btn btn-link">
-            <a class="nav-link active" aria-current="page" href="/madara/info"#>Info</a>
-        </button>
-    </li>
-</ule
+
+<div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 20px;">
+
+    {% for character in characters %}
+
+        <div style="width: 18rem; display: flex; flex-direction: column; justify-content: center; overflow: hidden; border: 0.1rem solid rgb(188, 187, 187); border-radius: 0.8rem;">
+            {# <img src="images/{{ character.image }}" style="width: 100%; aspect-ratio: 1; object-fit: cover; padding-bottom: 1rem;" /> #}
+
+            <a class="nav-link text-white p-0" aria-current="page" href="/characters/{{ character.id }}">
+                <img src="images/{{ character.image }}" style="width: 100%; aspect-ratio: 1; object-fit: cover;" />
+            </a>
+            
+            <button type="button" class="btn btn-primary mb-2" style="border-radius: 0px;">
+                <a class="nav-link text-white p-0" aria-current="page" href="/characters/{{ character.id }}">{{ character.title }}</a>
+            </button>
+            <button type="button" class="btn btn-link p-1">
+                <a class="nav-link active p-0" aria-current="page" href="/characters/{{ character.id }}/image">Picture</a>
+            </button>
+            <button type="button" class="btn btn-link p-1">
+                <a class="nav-link active p-0" aria-current="page" href="/characters/{{ character.id }}/info">Info</a>
+            </button>
+        </div>
+
+    {% endfor %}
+    
+</div>
+
 {% endblock %}

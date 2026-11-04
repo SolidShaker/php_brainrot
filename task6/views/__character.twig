@@ -3,12 +3,12 @@
 {% block content %}
 <ul class="nav nav-pills">
     <li class="nav-item">
-        <a class="nav-link {{ active == 'image' ? 'active'}}" href="/{{ character }}/image">
+        <a class="nav-link {{ flag == 'image' ? 'active' }}" href="/characters/{{ character.id }}/image">
             Picture
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {{ active == 'info' ? 'active'}}" href="/{{ character }}/info">
+        <a class="nav-link {{ flag == 'info' ? 'active' }}" href="/characters/{{ character.id }}/info">
             Info
         </a>
     </li>
