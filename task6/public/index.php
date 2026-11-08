@@ -4,9 +4,12 @@ require_once "../framework/autoload.php";
 
 
 require_once "../controllers/BaseCharacterTwigController.php";
-require_once "../controllers/Controller404.php"; // added
-require_once "../controllers/MainController.php"; // Main Page
-require_once "../controllers/ObjectController.php"; // Object
+
+require_once "../controllers/SearchController.php";
+require_once "../controllers/Controller404.php"; 
+
+require_once "../controllers/MainController.php"; 
+require_once "../controllers/ObjectController.php"; 
 
 
 
@@ -23,6 +26,9 @@ $database = new Database();
 
 
 $router = new Router($twig, $database->pdo);
+
+$router->Add("/search", SearchController::class);
+
 $router->Add('/', MainController::class);
 $router->Add("/characters/(?P<id>\d+)", ObjectController::class);
 
