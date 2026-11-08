@@ -3,13 +3,10 @@ require_once "../vendor/autoload.php";
 require_once "../framework/autoload.php";
 
 
+require_once "../controllers/BaseCharacterTwigController.php";
 require_once "../controllers/Controller404.php"; // added
-
 require_once "../controllers/MainController.php"; // Main Page
-
 require_once "../controllers/ObjectController.php"; // Object
-require_once "../controllers/ObjectInfoController.php"; // Info
-require_once "../controllers/ObjectImageController.php"; // Image
 
 
 
@@ -27,8 +24,6 @@ $database = new Database();
 
 $router = new Router($twig, $database->pdo);
 $router->Add('/', MainController::class);
-$router->Add("/characters/(?P<id>\d+)/info", ObjectInfoController::class);
-$router->Add("/characters/(?P<id>\d+)/image", ObjectImageController::class);
 $router->Add("/characters/(?P<id>\d+)", ObjectController::class);
 
 $router->GetOrDefault(Controller404::class);

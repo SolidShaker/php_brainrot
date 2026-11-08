@@ -7,8 +7,6 @@
     {% for character in characters %}
 
         <div style="width: 18rem; display: flex; flex-direction: column; justify-content: center; overflow: hidden; border: 0.1rem solid rgb(188, 187, 187); border-radius: 0.8rem;">
-            {# <img src="images/{{ character.image }}" style="width: 100%; aspect-ratio: 1; object-fit: cover; padding-bottom: 1rem;" /> #}
-
             <a class="nav-link text-white p-0" aria-current="page" href="/characters/{{ character.id }}">
                 <img src="images/{{ character.image }}" style="width: 100%; aspect-ratio: 1; object-fit: cover;" />
             </a>
@@ -17,10 +15,10 @@
                 <a class="nav-link text-white p-0" aria-current="page" href="/characters/{{ character.id }}">{{ character.title }}</a>
             </button>
             <button type="button" class="btn btn-link p-1">
-                <a class="nav-link active p-0" aria-current="page" href="/characters/{{ character.id }}/image">Picture</a>
+                <a class="nav-link active p-0" aria-current="page" href="/characters/{{ character.id }}?show=image">Picture</a>
             </button>
             <button type="button" class="btn btn-link p-1">
-                <a class="nav-link active p-0" aria-current="page" href="/characters/{{ character.id }}/info">Info</a>
+                <a class="nav-link active p-0" aria-current="page" href="/characters/{{ character.id }}?show=info">Info</a>
             </button>
         </div>
 

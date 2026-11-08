@@ -20,6 +20,7 @@ CREATE DATABASE characters OWNER slave;
 -- Create the characters table (NO trailing comma!)
 CREATE TABLE characters (
     id SERIAL PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     image VARCHAR(500)
@@ -31,17 +32,25 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO slave;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO slave;
 
 -- Insert Aizen and Madara
-INSERT INTO characters (title, description, image) VALUES
-('Aizen Sosuke', 'Everything you do is just a part of my plan.', 'aizen.jpg'),
-('Madara Uchiha', 'Wanna dance?..', 'madara.jpg'),
-('Askelad', 'Justice... Vengeance... Whatever.', 'askelad.jpg'),
-('L', 'I am L.', 'l.jpg'),
-('Gojo Satoru', 'I am the strongest one.', 'gojo.jpg'),
-('Sukuna', 'I am king of curses, Sukuna!', 'sukuna.jpg'),
-('Toji', 'I need to gamble.', 'toji.jpg'),
-('Temari', 'Sacrifice is an inevitable part of missions... Didnt you receive emotion training?', 'temari.jpg'),
-('Megumi', 'I am a man of potential, I am a bum.', 'megumi.jpg')
+INSERT INTO characters (type, title, description, image) VALUES
+('aura', 'Aizen Sosuke', 'Everything you do is just a part of my plan.', 'aizen.jpg'),
+('aura', 'Madara Uchiha', 'Wanna dance?..', 'madara.jpg'),
+('aura', 'Askelad', 'Justice... Vengeance... Whatever.', 'askelad.jpg'),
+('aura', 'L', 'I am L.', 'l.jpg'),
+('aura', 'Gojo Satoru', 'I am the strongest one.', 'gojo.jpg'),
+('aura', 'Sukuna', 'I am king of curses, Sukuna!', 'sukuna.jpg'),
+('aura', 'Toji', 'I need to gamble.', 'toji.jpg'),
+
+('bum',  'Temari', 'Sacrifice is an inevitable part of missions... Didnt you receive emotion training?', 'temari.jpg'),
+('bum',  'Megumi', 'I am a man of potential, I am a bum.', 'megumi.jpg'),
+('bum',  'Sakura Haruna', 'I am useless', 'sakura.jpg'),
+('bum',  'Sam Altman', 'Do you have a spare pair of ram', 'sam_altman.jpg'),
+('bum',  'Jeffrey Epstein', 'Do you have kids?..', 'kids_lover.jpg'),
+('bum',  'Rust', 'I am everywhere, I will rewrite you brain', 'rust_prog.jpg'),
+('bum',  'Maki', 'I am like Toji, uuuuu', 'maki.jpg')
 ;
+
+
 
 -- Verify the data was inserted
 SELECT * FROM characters;

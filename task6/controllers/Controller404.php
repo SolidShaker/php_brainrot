@@ -3,7 +3,8 @@
 
 
 
-class Controller404 extends TwigBaseController {
+class Controller404 extends BaseCharacterTwigController
+{
     public $template = "404.twig"; 
     public $title = "Page not found";
     
@@ -14,4 +15,3 @@ class Controller404 extends TwigBaseController {
         parent::get();
     }
 }
-?>

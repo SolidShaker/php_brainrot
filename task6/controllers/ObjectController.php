@@ -1,7 +1,7 @@
 <?php
 
 
-class ObjectController extends TwigBaseController
+class ObjectController extends BaseCharacterTwigController
 {
     public $template = "__character.twig"; 
     public $title = "Character Details";
@@ -20,7 +20,9 @@ class ObjectController extends TwigBaseController
             return $context;
         }
 
-        $query = $this->pdo->prepare("SELECT id, title FROM characters WHERE id = :id");
+        $query = $this->pdo->prepare(
+            "SELECT id, title, description, image FROM characters WHERE id = :id"
+        );
         $query->bindValue(':id', (int)$id, PDO::PARAM_INT);
         $query->execute();
         
@@ -33,8 +35,31 @@ class ObjectController extends TwigBaseController
         }
 
         $context['character'] = $character;
-        $context['flag'] = 'None';
-        $context['title'] = "{$character['title']} - Category";
+
+        
+        $show = $_GET['show'] ?? null;
+
+        if ($show == 'image')
+        {
+            $this->template  = "image.twig";
+            $this->title     = "{$character['title']} - Image";
+            $context['flag'] = 'image';
+
+            if (empty($character['image']))
+                $context['error'] = 'No image available for this character.';
+        } 
+        elseif ($show == 'info')
+        {
+            $this->template  = "info.twig";
+            $this->title     = "{$character['title']} - Info";
+            $context['flag'] = 'info';
+        }
+        else 
+        {
+            $this->template  = "__character.twig";
+            $this->title     = "{$character['title']} - Category";
+            $context['flag'] = "None";
+        }
 
         return $context;
     }
