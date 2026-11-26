@@ -1,0 +1,53 @@
+{% extends "__layout.twig" %}
+
+
+{% block content %}
+
+<h1>Character Creation Object</h1>
+<hr>
+
+{% if message %}
+<div class="alert alert-info">
+    {{ message }}    
+    {% if id %}
+        <br>
+        <a href="/characters/{{id}}">Open a new character</a>
+    {% endif %}
+</div>
+{% endif %}
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <form action="" enctype="multipart/form-data" method="POST" class="row g-3">
+            <div class="col">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control" name="title">
+            </div>
+            <div class="col-4">
+                <label class="form-label">Type</label>
+                <select class="form-control" name="type">
+                    {% for item in types %}
+                        <option 
+                            value="{{ item.type }}" 
+                            {% if item.type == search_type %}selected{% endif %}
+                        >
+                            {{ item.type|capitalize }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Image</label>
+                <input class="form-control" type="file" name="image">
+            </div>
+            <div class="col-12">
+                <textarea name="description" placeholder="Full description..." class="form-control" rows="5"></textarea>
+            </div>
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </form>
+    </ul>
+</li>
+
+{% endblock %}

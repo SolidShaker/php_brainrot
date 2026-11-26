@@ -7,7 +7,11 @@ class BaseCharacterTwigController extends TwigBaseController
     {
         $context = parent::GetContext();
 
-        $query = $this->pdo->query("SELECT DISTINCT type FROM characters ORDER BY 1");
+        $query = $this->pdo->query("
+            SELECT DISTINCT t.type 
+            FROM characters_types t 
+            ORDER BY 1"
+        );
         $types = $query->fetchAll();
         $context['types'] = $types;
 

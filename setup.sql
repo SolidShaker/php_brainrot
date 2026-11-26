@@ -17,10 +17,16 @@ CREATE DATABASE characters OWNER slave;
 -- Connect to the characters database
 \c characters
 
--- Create the characters table (NO trailing comma!)
+-- Create the types table FIRST (parent table)
+CREATE TABLE characters_types (
+    id SERIAL PRIMARY KEY,
+    type VARCHAR(50) NOT NULL UNIQUE   -- removed trailing semicolon inside parens, added UNIQUE
+);
+
+-- Create the characters table with a FOREIGN KEY to characters_types
 CREATE TABLE characters (
     id SERIAL PRIMARY KEY,
-    type VARCHAR(50) NOT NULL,
+    type_id INTEGER NOT NULL REFERENCES characters_types(id) ON DELETE RESTRICT,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     image VARCHAR(500)
@@ -31,28 +37,33 @@ GRANT ALL PRIVILEGES ON SCHEMA public TO slave;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO slave;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO slave;
 
--- Insert Aizen and Madara
-INSERT INTO characters (type, title, description, image) VALUES
-('aura', 'Aizen Sosuke', 'Everything you do is just a part of my plan.', 'aizen.jpg'),
-('aura', 'Madara Uchiha', 'Wanna dance?..', 'madara.jpg'),
-('aura', 'Askelad', 'Justice... Vengeance... Whatever.', 'askelad.jpg'),
-('aura', 'L', 'I am L.', 'l.jpg'),
-('aura', 'Gojo Satoru', 'I am the strongest one.', 'gojo.jpg'),
-('aura', 'Sukuna', 'I am king of curses, Sukuna!', 'sukuna.jpg'),
-('aura', 'Toji', 'I need to gamble.', 'toji.jpg'),
+-- Insert the distinct types first
+INSERT INTO characters_types (type) VALUES
+('aura'),
+('bum');
 
-('bum',  'Temari', 'Sacrifice is an inevitable part of missions... Didnt you receive emotion training?', 'temari.jpg'),
-('bum',  'Megumi', 'I am a man of potential, I am a bum.', 'megumi.jpg'),
-('bum',  'Sakura Haruna', 'I am useless', 'sakura.jpg'),
-('bum',  'Sam Altman', 'Do you have a spare pair of ram', 'sam_altman.jpg'),
-('bum',  'Jeffrey Epstein', 'Do you have kids?..', 'kids_lover.jpg'),
-('bum',  'Rust', 'I am everywhere, I will rewrite you brain', 'rust_prog.jpg'),
-('bum',  'Maki', 'I am like Toji, uuuuu', 'maki.jpg')
-;
+-- Insert characters, referencing the type by its id
+INSERT INTO characters (type_id, title, description, image) VALUES
+(1, 'Aizen Sosuke',   'Everything you do is just a part of my plan.', '/images/aizen.jpg'),
+(1, 'Madara Uchiha',  'Wanna dance?..', '/images/madara.jpg'),
+(1, 'Askelad',        'Justice... Vengeance... Whatever.', '/images/askelad.jpg'),
+(1, 'L',              'I am L.', '/images/l.jpg'),
+(1, 'Gojo Satoru',    'I am the strongest one.', '/images/gojo.jpg'),
+(1, 'Sukuna',         'I am king of curses, Sukuna!', '/images/sukuna.jpg'),
+(1, 'Toji',           'I need to gamble.', '/images/toji.jpg'),
 
+(2, 'Temari',         'Sacrifice is an inevitable part of missions... Didnt you receive emotion training?', '/images/temari.jpg'),
+(2, 'Megumi',         'I am a man of potential, I am a bum.', '/images/megumi.jpg'),
+(2, 'Sakura Haruna',  'I am useless', '/images/sakura.jpg'),
+(2, 'Sam Altman',     'Do you have a spare pair of ram sticks in your ass', '/images/sam_altman.jpg'),
+(2, 'Jeffrey Epstein', 'Do you have kids?..', '/images/kids_lover.jpg'),
+(2, 'Rust',           'I am everywhere, I will rewrite you brain', '/images/rust_prog.jpg'),
+(2, 'Maki',           'I am like Toji, uuuuu', '/images/maki.jpg');
 
-
--- Verify the data was inserted
-SELECT * FROM characters;
+-- Verify the data
+SELECT c.id, t.type, c.title, c.description, c.image
+FROM characters c
+JOIN characters_types t ON t.id = c.type_id
+ORDER BY c.id;
 
 \echo 'Database setup completed successfully!'

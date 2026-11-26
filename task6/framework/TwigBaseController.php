@@ -20,11 +20,9 @@ class TwigBaseController extends BaseController
         return $context;
     }
 
-    public function Get() 
+    public function GET(array $context) 
     {
-        $context = $this->GetContext();
         $context["title"] = $this->title;        
-        
         echo $this->twig->render($this->template, $context);
     }
 }

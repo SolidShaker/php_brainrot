@@ -21,7 +21,9 @@ class ObjectController extends BaseCharacterTwigController
         }
 
         $query = $this->pdo->prepare(
-            "SELECT id, title, description, image FROM characters WHERE id = :id"
+            "SELECT id, title, description, image 
+            FROM characters 
+            WHERE id = :id"
         );
         $query->bindValue(':id', (int)$id, PDO::PARAM_INT);
         $query->execute();

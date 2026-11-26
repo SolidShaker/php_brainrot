@@ -15,18 +15,19 @@ class SearchController extends BaseCharacterTwigController
         $description = $_GET['search_description'] ?? ''; 
 
         $sql = <<< EOL
-            SELECT id, title
-            FROM characters
-            WHERE (:title = '' OR title ILIKE CONCAT('%', :title, '%'))
-            AND (:type = '' OR type = :type)
-            AND (:description = '' OR description ILIKE CONCAT('%', :description, '%')) 
+            SELECT c.id, c.title
+            FROM characters c
+            JOIN characters_types t ON t.id = c.type_id
+            WHERE (:title = '' OR c.title ILIKE CONCAT('%', :title, '%'))
+            AND (:type = '' OR t.type = :type)
+            AND (:description = '' OR c.description ILIKE CONCAT('%', :description, '%')) 
         EOL;
 
         $query = $this->pdo->prepare($sql);
 
-        $query->bindValue(":title", $title);
-        $query->bindValue(":type", $type);
-        $query->bindValue(":description", $description); 
+        $query->bindValue(":title",         $title,         PDO::PARAM_STR);
+        $query->bindValue(":type",          $type,          PDO::PARAM_STR);
+        $query->bindValue(":description",   $description,   PDO::PARAM_STR); 
         $query->execute();
 
         $context['search_characters'] = $query->fetchAll();
@@ -38,3 +39,4 @@ class SearchController extends BaseCharacterTwigController
         return $context;
     }
 }
+

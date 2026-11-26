@@ -2,58 +2,66 @@
 
 
 
+
 {% block content %}
     <h1 class="mb-4">Search</h1>
 
-    <form action="">
-        <div class="row g-3 align-items-end mb-4">
-            
-            <div class="col-3">
-                <label class="form-label">Type</label>
 
-                <select name="search_type" class="form-select">
+<ul class="list-group">
+    <li class="list-group-item">
+        <form action="">
+            <div class="row g-3 align-items-end mb-4">
+                
+                <div class="col-3">
+                    <label class="form-label">Type</label>
 
-                    <option value="">All</option>
+                    <select name="search_type" class="form-select">
 
-                    {% for item in types %}
-                        <option value="{{ item.type }}" {% if item.type == search_type %}selected{% endif %}>
-                            {{ item.type|capitalize }}
-                        </option>
-                    {% endfor %}
+                        <option value="">All</option>
 
-                </select>
+                        {% for item in types %}
+                            <option value="{{ item.type }}" {% if item.type == search_type %}selected{% endif %}>
+                                {{ item.type|capitalize }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+
+
+                <div class="col-3">
+                    <label class="form-label">Title</label>
+                    <input type="text" name="search_title" class="form-control" value="{{ search_title }}">
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label">Description</label>
+                    <input type="text" name="search_description" class="form-control" value="{{ search_description }}">
+                </div>
+
+                <div class="col-2">
+                    <button type="submit" class="btn btn-primary w-100">Find</button>
+                </div>
+
             </div>
+        </form>
 
-
-
-            <div class="col-3">
-                <label class="form-label">Title</label>
-                <input type="text" name="search_title" class="form-control" value="{{ search_title }}">
-            </div>
-
-            <div class="col-4">
-                <label class="form-label">Description</label>
-                <input type="text" name="search_description" class="form-control" value="{{ search_description }}">
-            </div>
-
-            <div class="col-2">
-                <button type="submit" class="btn btn-primary w-100">Find</button>
-            </div>
-
+        <div class="list-group">
+            {% for character in search_characters %}
+                <a  
+                    class="list-group-item list-group-item-action text-primary"
+                    href="/characters/{{ character.id }}"    
+                >
+                    {{ character.title }}
+                </a>
+            {% else %}
+                <div class="alert alert-info">No characters found matching your criteria.</div>
+            {% endfor %}
         </div>
-    </form>
 
-    <div class="list-group">
-        {% for character in search_characters %}
-            <a  
-                class="list-group-item list-group-item-action text-primary"
-                href="/characters/{{ character.id }}"    
-            >
-                {{ character.title }}
-            </a>
-        {% else %}
-            <div class="alert alert-info">No characters found matching your criteria.</div>
-        {% endfor %}
-    </div>
+    </ul>
+</li>
+
 
 {% endblock %}

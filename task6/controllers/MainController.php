@@ -15,7 +15,12 @@ class MainController extends BaseCharacterTwigController
 
         if (isset($_GET['type']))
         {
-            $query = $this->pdo->prepare("SELECT * FROM characters WHERE type = :type");
+            $query = $this->pdo->prepare(
+                "SELECT c.* 
+                FROM characters c
+                JOIN characters_types t ON t.id = c.type_id
+                WHERE t.type = :type"
+            );
             $query->bindValue(':type', $_GET['type']);
             $query->execute();
         } else {
@@ -27,3 +32,4 @@ class MainController extends BaseCharacterTwigController
         return $context;
     }
 }
+

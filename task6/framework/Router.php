@@ -11,7 +11,7 @@ class Route
     public function __construct($route_regexp, $controller)
     {
         $this->route_regexp = $route_regexp;
-        $this->controller = $controller;
+        $this->controller   = $controller;
     }
 }
 
@@ -29,12 +29,12 @@ class Router
         $this->pdo  = $pdo;
     }
 
-    public function Add($route_regexp, $controller)
+    public function Add($route_regexp, $controller): void
     {
         array_push($this->routes, new Route("#^$route_regexp$#", $controller));
     }
 
-    public function GetOrDefault($default_controller)
+    public function GetOrDefault($default_controller) 
     {
         $url = $_SERVER["REQUEST_URI"];
         $path = parse_url($url, PHP_URL_PATH);
@@ -57,7 +57,7 @@ class Router
         if ($controllerInstance instanceof BaseCharacterTwigController) 
             $controllerInstance->SetTwig($this->twig);
         
-        return $controllerInstance->Get();
+        return $controllerInstance->ProcessResponse();
     }
 }
 

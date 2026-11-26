@@ -9,9 +9,9 @@ class Controller404 extends BaseCharacterTwigController
     public $title = "Page not found";
     
 
-    public function Get()
+    public function GET(array $context)
     {
         http_response_code(404); 
-        parent::get();
+        parent::GET($context);
     }
 }
