@@ -13,6 +13,8 @@ require_once __DIR__ . "/../controllers/ObjectController.php";
 require_once __DIR__ . "/../controllers/SearchController.php";
 require_once __DIR__ . "/../controllers/CharacterObjectCreateController.php";
 require_once __DIR__ . "/../controllers/CharacterTypeCreateController.php";
+require_once __DIR__ . "/../controllers/CharacterObjectDeleteController.php";
+require_once __DIR__ . "/../controllers/CharacterObjectUpdateController.php";
 
 
 
@@ -32,6 +34,8 @@ $router = new Router($twig, $database->pdo);
 $router->Add("/search", SearchController::class);
 $router->Add("/create/character", CharacterObjectCreateController::class);
 $router->Add("/create/type", CharacterTypeCreateController::class);
+$router->Add("/characters/(?P<id>\d+)/delete", CharacterObjectDeleteController::class);
+$router->Add("/characters/(?P<id>\d+)/edit", CharacterObjectUpdateController::class);
 
 $router->Add('/', MainController::class);
 $router->Add("/characters/(?P<id>\d+)", ObjectController::class);

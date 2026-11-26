@@ -27,7 +27,9 @@ abstract class BaseController
         if ($method == "GET")
         {
             $this->GET($this->GetContext());
-        } else if ($method == "POST") {
+        } 
+        else if ($method == "POST") 
+        {
             $this->POST($this->GetContext());
         }
     }

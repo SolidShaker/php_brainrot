@@ -1,0 +1,106 @@
+
+{% extends "__layout.twig" %}
+
+{% block content %}
+
+<h1>Character Update</h1>
+<hr>
+
+{% if message %}
+<div class="alert alert-info">
+    {{ message }}
+
+    {% if id %}
+        <br>
+        <a href="/characters/{{ id }}">Open updated character</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if show_form %}
+<ul class="list-group">
+    <li class="list-group-item">
+
+        <form action="" enctype="multipart/form-data" method="POST" class="row g-3">
+
+            <div class="col-12">
+                <label class="form-label">Current Image</label>
+                <br>
+
+                <img
+                    src="{{ character_by_id.image }}"
+                    alt="{{ character_by_id.title }}"
+                    style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px;"
+                >
+            </div>
+
+            <div class="col">
+                <label class="form-label">Title</label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    name="title"
+                    value="{{ character_by_id.title }}"
+                >
+            </div>
+
+            <div class="col-4">
+                <label class="form-label">Type</label>
+
+                <select class="form-control" name="type">
+                    {% for item in types %}
+                        <option
+                            value="{{ item.type }}"
+                            {% if item.type == character_by_id.type %}selected{% endif %}
+                        >
+                            {{ item.type|capitalize }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-12">
+
+                <label class="form-label">Replace Image</label>
+                <input
+                    class="form-control"
+                    type="file"
+                    name="image"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                >
+                <small class="text-muted">
+                    Leave empty to keep the current image.
+                </small>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label">Description</label>
+
+                <textarea
+                    name="description"
+                    class="form-control"
+                    rows="5"
+                    placeholder="Full description..."
+                >{{ character_by_id.description }}</textarea>
+            </div>
+
+            <div class="col-12 text-end">
+                <a href="/characters/{{ character_by_id.id }}"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-primary">
+                    Update
+                </button>
+            </div>
+
+        </form>
+
+    </li>
+</ul>
+{% endif %}
+
+{% endblock %}
+
