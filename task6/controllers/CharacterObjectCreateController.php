@@ -22,13 +22,13 @@ class CharacterObjectCreateController extends BaseCharacterTwigController
         if ($title === "" || $descr === "" || $type === "")
         {
             $context["message"] = "All fields should be filled";
-            goto skip;
+            return $this->GET($context);
         }
 
         if (!isset($_FILES["image"]) || $_FILES["image"]["error"] !== UPLOAD_ERR_OK) 
         {
             $context["message"] = "Image upload failed or no file was uploaded";
-            goto skip;
+            return $this->GET($context);
         }
 
         // Image
@@ -48,7 +48,7 @@ class CharacterObjectCreateController extends BaseCharacterTwigController
         if (!array_key_exists($mimeType, $allowedMimeTypes)) 
         {
             $context["message"] = "Invalid file type. Only JPG, PNG, GIF, and WEBP images are allowed";
-            goto skip;
+            return $this->GET($context);
         }
 
         // Image Header Check
@@ -57,7 +57,7 @@ class CharacterObjectCreateController extends BaseCharacterTwigController
         if ($imageInfo === false) 
         {
             $context["message"] = "File does not contain valid image headers";
-            goto skip;
+            return $this->GET($context);
         }
 
         [$width, $height] = $imageInfo;
@@ -65,7 +65,7 @@ class CharacterObjectCreateController extends BaseCharacterTwigController
         if ($width < 10 || $height < 10 || $width > 5000 || $height > 5000) 
         {
             $context["message"] = "Image dimensions must be between 10x10 and 5000x5000 pixels";
-            goto skip;
+            return $this->GET($context);
         }
 
         // Prepare file paths
@@ -75,16 +75,14 @@ class CharacterObjectCreateController extends BaseCharacterTwigController
 
         $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/media/';
         if (!is_dir($uploadDir)) 
-        {
             mkdir($uploadDir, 0755, true);
-        }
 
         $diskPath = $uploadDir . $safeFilename;
 
         if (!move_uploaded_file($temImage, $diskPath)) 
         {
             $context["message"] = "Failed to save the image on the server";
-            goto skip;
+            return $this->GET($context);
         }
 
         $sql = <<<EOL
@@ -105,13 +103,12 @@ class CharacterObjectCreateController extends BaseCharacterTwigController
         {
             @unlink($diskPath); // Clean up img file
             $context["message"] = "Invalid character type selected";
-            goto skip;
+            return $this->GET($context);
         }
 
         $context["message"] = "Character is created";
         $context["id"] = $this->pdo->lastInsertId();
 
-skip:
         $this->GET($context);
     }
 

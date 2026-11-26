@@ -54,7 +54,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
         if ($title === "" || $descr === "" || $type === "") 
         {
             $context["message"] = "All fields should be filled";
-            goto skip;
+            return $this->GET($context);
         }
 
         $sql = "SELECT * FROM characters WHERE id = :id";
@@ -79,7 +79,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
             if ($_FILES["image"]["error"] !== UPLOAD_ERR_OK) 
             {
                 $context["message"] = "Image upload failed";
-                goto skip;
+                return $this->GET($context);
             }
 
             $tempImage = $_FILES["image"]["tmp_name"];
@@ -97,7 +97,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
             if (!array_key_exists($mimeType, $allowedMimeTypes)) 
             {
                 $context["message"] = "Invalid image type";
-                goto skip;
+                return $this->GET($context);
             }
 
             // Check image headers and dimensions
@@ -106,7 +106,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
             if ($imageInfo === false) 
             {
                 $context["message"] = "Invalid image file";
-                goto skip;
+                return $this->GET($context);
             }
 
             [$width, $height] = $imageInfo;
@@ -116,7 +116,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
                 $width > 5000 || $height > 5000
             ) {
                 $context["message"] = "Image dimensions must be between 10x10 and 5000x5000 pixels";
-                goto skip;
+                return $this->GET($context);
             }
 
             // Save new image
@@ -136,7 +136,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
             if (!move_uploaded_file($tempImage, $diskPath)) 
             {
                 $context["message"] = "Failed to save image";
-                goto skip;
+                return $this->GET($context);
             }
         }
 
@@ -162,18 +162,9 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
 
         $query->execute();
 
-        /* if ($diskPath !== null)  */
-        /* { */
-        /*     $oldImage = $_SERVER['DOCUMENT_ROOT'] . $character['image']; */
-        /**/
-        /*     if (is_file($oldImage))  */
-        /*         @unlink($oldImage); */
-        /* } */
-
         $context["message"] = "Character updated successfully!";
         $context["id"] = $id;
 
-    skip:
         $this->GET($context);
     }
 }

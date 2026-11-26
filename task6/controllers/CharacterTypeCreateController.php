@@ -20,7 +20,7 @@ class CharacterTypeCreateController extends BaseCharacterTwigController
         if ($type === "")
         {
             $context["message"] = "Type should be filled";
-            goto skip;
+            return $this->GET($context);
         }
 
         $sql = <<<EOL
@@ -36,12 +36,11 @@ class CharacterTypeCreateController extends BaseCharacterTwigController
         if ($query->rowCount() === 0) 
         {
             $context["message"] = "Character type '$type' already exists";
-            goto skip;
+            return $this->GET($context);
         }
                         
         $context["message"] = "Type '$type' was created";
 
-skip:
         $this->GET($context);
     }
 
