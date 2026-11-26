@@ -25,7 +25,7 @@ class ObjectController extends BaseCharacterTwigController
             FROM characters 
             WHERE id = :id"
         );
-        $query->bindValue(':id', (int)$id, PDO::PARAM_INT);
+        $query->bindValue(':id', (int)$id);
         $query->execute();
         
         $character = $query->fetch(PDO::FETCH_ASSOC);

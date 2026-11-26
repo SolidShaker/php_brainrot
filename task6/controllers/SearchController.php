@@ -25,9 +25,9 @@ class SearchController extends BaseCharacterTwigController
 
         $query = $this->pdo->prepare($sql);
 
-        $query->bindValue(":title",         $title,         PDO::PARAM_STR);
-        $query->bindValue(":type",          $type,          PDO::PARAM_STR);
-        $query->bindValue(":description",   $description,   PDO::PARAM_STR); 
+        $query->bindValue(":title",         $title);
+        $query->bindValue(":type",          $type);
+        $query->bindValue(":description",   $description); 
         $query->execute();
 
         $context['search_characters'] = $query->fetchAll();

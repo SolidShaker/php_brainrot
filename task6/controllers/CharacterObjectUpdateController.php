@@ -26,7 +26,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
         SQL;
 
         $query = $this->pdo->prepare($sql);
-        $query->bindValue(":id", $id, PDO::PARAM_INT);
+        $query->bindValue(":id", $id);
         $query->execute();
 
         $data = $query->fetch(PDO::FETCH_ASSOC);
@@ -60,28 +60,28 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
         $sql = "SELECT * FROM characters WHERE id = :id";
 
         $query = $this->pdo->prepare($sql);
-        $query->bindValue(":id", $id, PDO::PARAM_INT);
+        $query->bindValue(":id", $id);
         $query->execute();
 
         $character = $query->fetch(PDO::FETCH_ASSOC);
-
-        if (!$character) 
-            throw new Exception("Character not found");
+        if (!$character) // We don't want a user to submit data to non-existend character
+        {
+            $context["message"] = "Character not found. It may have been deleted.";
+            return parent::GET($context);
+        }
 
         $publicUrl = $character['image'];
-        $diskPath = null;
+        if ($_FILES["image"]["error"] !== UPLOAD_ERR_NO_FILE)  // Checking if file was uploaded
+        {
 
-        if (
-            isset($_FILES["image"]) &&
-            $_FILES["image"]["error"] !== UPLOAD_ERR_NO_FILE
-        ) {
-
+            // Checking if error occurred during an upload
             if ($_FILES["image"]["error"] !== UPLOAD_ERR_OK) 
             {
                 $context["message"] = "Image upload failed";
                 return $this->GET($context);
             }
 
+            // Checking contents of the file instead of trusting a given type
             $tempImage = $_FILES["image"]["tmp_name"];
 
             $finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -100,7 +100,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
                 return $this->GET($context);
             }
 
-            // Check image headers and dimensions
+            // Check of the image headers 
             $imageInfo = getimagesize($tempImage);
 
             if ($imageInfo === false) 
@@ -109,6 +109,8 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
                 return $this->GET($context);
             }
 
+            
+            // Restricting to certain size of the image
             [$width, $height] = $imageInfo;
 
             if (
@@ -119,17 +121,11 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
                 return $this->GET($context);
             }
 
-            // Save new image
-            $extension = $allowedMimeTypes[$mimeType];
-
-            $safeFilename = bin2hex(random_bytes(16)) . '.' . $extension;
-
-            $publicUrl = '/media/' . $safeFilename;
+            $extension = $allowedMimeTypes[$mimeType]; 
+            $safeFilename = bin2hex(random_bytes(16)) . '.' . $extension; // Encoding into unique name
+            $publicUrl = '/media/' . $safeFilename; 
 
             $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/media/';
-
-            if (!is_dir($uploadDir)) 
-                mkdir($uploadDir, 0755, true);
 
             $diskPath = $uploadDir . $safeFilename;
 
@@ -140,7 +136,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
             }
         }
 
-        // Update character
+        // Updating character
         $sql = <<<SQL
             UPDATE characters
             SET title = :title,
@@ -158,7 +154,7 @@ class CharacterObjectUpdateController extends BaseCharacterTwigController
         $query->bindValue(":description", $descr);
         $query->bindValue(":type", $type);
         $query->bindValue(":image", $publicUrl);
-        $query->bindValue(":id", $id, PDO::PARAM_INT);
+        $query->bindValue(":id", $id);
 
         $query->execute();
 

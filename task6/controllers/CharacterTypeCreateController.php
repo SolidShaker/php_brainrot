@@ -30,7 +30,7 @@ class CharacterTypeCreateController extends BaseCharacterTwigController
         EOL;   
 
         $query = $this->pdo->prepare($sql);
-        $query->bindValue(':type', $type, PDO::PARAM_STR);
+        $query->bindValue(':type', $type);
         $query->execute();        
 
         if ($query->rowCount() === 0) 

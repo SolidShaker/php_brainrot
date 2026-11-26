@@ -25,7 +25,7 @@ class CharacterObjectCreateController extends BaseCharacterTwigController
             return $this->GET($context);
         }
 
-        if (!isset($_FILES["image"]) || $_FILES["image"]["error"] !== UPLOAD_ERR_OK) 
+        if ($_FILES["image"]["error"] !== UPLOAD_ERR_OK) 
         {
             $context["message"] = "Image upload failed or no file was uploaded";
             return $this->GET($context);
@@ -74,8 +74,6 @@ class CharacterObjectCreateController extends BaseCharacterTwigController
         $publicUrl    = '/media/' . $safeFilename;
 
         $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/media/';
-        if (!is_dir($uploadDir)) 
-            mkdir($uploadDir, 0755, true);
 
         $diskPath = $uploadDir . $safeFilename;
 
@@ -93,10 +91,10 @@ class CharacterObjectCreateController extends BaseCharacterTwigController
         EOL;   
 
         $query = $this->pdo->prepare($sql);
-        $query->bindValue(':title',       $title,     PDO::PARAM_STR);
-        $query->bindValue(':description', $descr,     PDO::PARAM_STR);
-        $query->bindValue(':type',        $type,      PDO::PARAM_STR);   
-        $query->bindValue(':image_url',   $publicUrl, PDO::PARAM_STR);
+        $query->bindValue(':title',       $title);
+        $query->bindValue(':description', $descr);
+        $query->bindValue(':type',        $type);   
+        $query->bindValue(':image_url',   $publicUrl);
         $query->execute();        
 
         if ($query->rowCount() === 0) 
